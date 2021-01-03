@@ -61,28 +61,31 @@ export function paramSchema(schema) {
   };
 }
 
-export function validateArgs(target, propertyKey, descriptor) {
-  let existingConstrainedParameters = Reflect.getOwnMetadata(
-    parameterSchemaMetadataKey,
-    target,
-    propertyKey
-  ) || [];;
-    const oldValue = descriptor.value;
-    descriptor.value = function (...args) {
-             if (existingConstrainedParameters) {
-               const parameterIndexes = Object.keys(existingConstrainedParameters);
-               for (let parameterIndex of parameterIndexes) {
-                 const { error } = existingConstrainedParameters[parameterIndex].validate(
-                   args[Number.parseInt(parameterIndex)]
-                 );
-                 if (error instanceof Error) {
-                   console.log(error)
-                  return
+export function validateArgs(errorHandle) {
+  return function validate(target, propertyKey, descriptor) {
+    let existingConstrainedParameters = Reflect.getOwnMetadata(
+      parameterSchemaMetadataKey,
+      target,
+      propertyKey
+    ) || [];;
+      const oldValue = descriptor.value;
+      descriptor.value = function (...args) {
+               if (existingConstrainedParameters) {
+                 const parameterIndexes = Object.keys(existingConstrainedParameters);
+                 for (let parameterIndex of parameterIndexes) {
+                   const { error } = existingConstrainedParameters[parameterIndex].validate(
+                     args[Number.parseInt(parameterIndex)]
+                   );
+                   if (error instanceof Error) {
+                    errorHandle.apply(this, [error, propertyKey])
+                    return
+                   }
                  }
                }
-             }
-            
-        return oldValue.apply(this, args)
-    }
-    return descriptor
-};
+              
+          return oldValue.apply(this, args)
+      }
+      return descriptor
+  };
+}
+ 

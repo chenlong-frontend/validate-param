@@ -9,8 +9,11 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "esnext",
-    "module": "commonjs",
+    "module": "ES2015",
+    "outDir": "./dist",
     "moduleResolution": "node",
-    "typeRoots": []
+    "typeRoots": [
+      "./node_modules/@types",
+    ]
   }
 }
