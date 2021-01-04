@@ -5,7 +5,7 @@ based on [ts-decorator-validation](https://github.com/kanian/ts-decorator-valida
 ## install 
 
 ```
-yarn add typescript-validate-param
+yarn add typescript-validate-param joi
 ```
 
 ## usage
