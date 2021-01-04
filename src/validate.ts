@@ -1,16 +1,17 @@
 import "reflect-metadata";
 const parameterSchemaMetadataKey = Symbol("parameterSchemaMetadataKey");
 
-export function schema(schema, validateParams: boolean = false) {
+export function schema(schema, validateParams: boolean = false, errorHandle) {
   return function validateArgs(target: any) {
     var original = target;
     var f: any = function(...args) {
       if (validateParams) {
-        validateConstructorParams(target, args); 
+        validateConstructorParams(target, args, errorHandle); 
       }
       const instance = new original(...args);
       const { error } = schema.validate(instance);
       if (error instanceof Error) {
+        errorHandle && errorHandle.apply(this, [error, target])
         throw error;
       }
 
@@ -21,7 +22,7 @@ export function schema(schema, validateParams: boolean = false) {
   };
 }
 
-export function validateConstructorParams(target: any, args: any[]) {
+function validateConstructorParams(target: any, args: any[], errorHandle) {
   let existingConstrainedParameters = Reflect.getOwnMetadata(
     parameterSchemaMetadataKey,
     target,
@@ -34,10 +35,36 @@ export function validateConstructorParams(target: any, args: any[]) {
         args[Number.parseInt(parameterIndex)]
       );
       if (error instanceof Error) {
+        errorHandle && errorHandle(error, target)
         throw error;
       }
     }
   }
+}
+
+export function propertySchema(schema) {
+  return function(target: Object, key: string | symbol): void {
+    let val = target[key];
+    let propertyName = String(key);
+
+    const getter = () => {
+      return val;
+    };
+    const setter = value => {
+      const { error } = schema.validate(value);
+      if (error instanceof Error) {
+        error.message = error.message.replace('"value"', `"${propertyName}"`);
+        throw error;
+      }
+      val = value;
+    };
+    Object.defineProperty(target, key, {
+      get: getter,
+      set: setter,
+      enumerable: true,
+      configurable: true
+    });
+  };
 }
 
 export function paramSchema(schema) {
@@ -77,7 +104,7 @@ export function validateArgs(errorHandle) {
                      args[Number.parseInt(parameterIndex)]
                    );
                    if (error instanceof Error) {
-                    errorHandle.apply(this, [error, propertyKey])
+                    errorHandle && errorHandle.apply(this, [error, propertyKey])
                     return
                    }
                  }

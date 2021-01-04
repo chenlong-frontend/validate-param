@@ -1,6 +1,6 @@
 ## parameter decorators
 
-The inspiration comes from [this article](https://www.typescriptlang.org/docs/handbook/decorators.html#parameter-decorators)。
+based on [ts-decorator-validation](https://github.com/kanian/ts-decorator-validation)。
 
 ## install 
 
@@ -11,43 +11,83 @@ yarn add typescript-validate-param
 ## usage
 
 ```js
-import {validateArgs,paramSchema} from 'typescript-validate-param'
+import {schema, validateArgs, paramSchema, propertySchema} from 'typescript-validate-param'
 const Joi = require('joi')
 
 // define validation rules
 const personNameSchema = Joi.string().min(3)
 const personAgeSchema = Joi.number().min(1)
+const propertyAgeSchema = Joi.number().min(10)
 
-// handler error here
+const personSchema = Joi.object({
+  name: personNameSchema,
+  age: personAgeSchema
+})
+
+// handler error
 function error(err, key) {
   // 'this' bind class 'Person' Instance
   console.log(this.age)
-  // get error info here
+  // get error info
   console.error('err is', err)
   // error propertyKey
   console.log(key)
 }
 
-@schema(personSchema,true)
-    class Person {
-      age: number
-      name: string
-      constructor(name: string, age: number
-      ) {
-        ;(this.age = age), (this.name = name)
-      }
+@schema(personSchema, true, error)
+class Person {
+  @propertySchema(propertyAgeSchema)
+  age: number
+  @propertySchema(personNameSchema)
+  name: string
 
-    @validateArgs(error)
-    test2  (
-      @paramSchema(personNameSchema) name,
-      @paramSchema(personAgeSchema) age
-    ) {
-      this.age = age
-      this.name = name
-    }
+  constructor(@paramSchema(personNameSchema) name: string,@paramSchema(personAgeSchema) age: number) {
+    this.age = age
+    this.name = name
+  }  
+  @validateArgs(error)
+  test2  (
+    @paramSchema(personNameSchema) name,
+    @paramSchema(personAgeSchema) age
+  ) {
+    this.age = age
+    this.name = name
+  }
 }
-let a = new Person('Jake', 9)
+let a = new Person('Jake', 10)
 a.test2('3', 1)
 ```
 
+## schema
 
+validate `class`
+
+|  参数 |  类型 | 说明 |
+| ------------ | ------------ | -------|
+| schema | Schema | validation rules |
+| isValidateConstructor | Boolen | 'true' validate constructor param, 'false' not | 
+| errorHandle | Function | error handle |
+
+## propertySchema
+
+validate `property`
+
+|  参数 |  类型 | 说明 |
+| ------------ | ------------ | -------|
+| schema | Schema | validation rules |
+
+## validateArgs
+
+validate `function`
+
+|  参数 |  类型 | 说明 |
+| ------------ | ------------ | -------|
+| errorHandle | Function | error handle |
+
+## paramSchema
+
+define param validation rules
+
+|  参数 |  类型 | 说明 |
+| ------------ | ------------ | -------|
+| schema | Schema | validation rules |

@@ -1,8 +1,7 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.example = {}));
-}(this, (function (exports) { 'use strict';
+(function (factory) {
+    typeof define === 'function' && define.amd ? define(factory) :
+    factory();
+}((function () { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -132,8 +131,8 @@
               u = {
             __proto__: []
           } instanceof Array,
-              f = !i && !u,
-              a = {
+              a = !i && !u,
+              f = {
             create: i ? function () {
               return nt(Object.create(null));
             } : u ? function () {
@@ -143,12 +142,12 @@
             } : function () {
               return nt({});
             },
-            has: f ? function (t, r) {
+            has: a ? function (t, r) {
               return e.call(t, r);
             } : function (t, e) {
               return e in t;
             },
-            get: f ? function (t, r) {
+            get: a ? function (t, r) {
               return e.call(t, r) ? t[r] : void 0;
             } : function (t, e) {
               return t[e];
@@ -163,7 +162,7 @@
           function l(t, e, r, n) {
             if (z(r)) {
               if (!Y(t)) throw new TypeError();
-              if (!B(e)) throw new TypeError();
+              if (!q(e)) throw new TypeError();
               return O(t, e);
             }
 
@@ -176,7 +175,7 @@
           function v(t, e) {
             function r(r, n) {
               if (!C(r)) throw new TypeError();
-              if (!z(n) && !G(n)) throw new TypeError();
+              if (!z(n) && !B(n)) throw new TypeError();
               P(t, e, r, n);
             }
 
@@ -208,12 +207,12 @@
             return z(r) || (r = D(r)), S(t, e, r);
           }
 
-          function k(t, e) {
+          function m(t, e) {
             if (!C(t)) throw new TypeError();
             return z(e) || (e = D(e)), I(t, e);
           }
 
-          function m(t, e) {
+          function k(t, e) {
             if (!C(t)) throw new TypeError();
             return z(e) || (e = D(e)), R(t, e);
           }
@@ -234,7 +233,7 @@
               var n = (0, t[r])(e);
 
               if (!z(n) && !L(n)) {
-                if (!B(n)) throw new TypeError();
+                if (!q(n)) throw new TypeError();
                 e = n;
               }
             }
@@ -275,7 +274,7 @@
 
           function M(t, e, r) {
             if (x(t, e, r)) return !0;
-            var n = $(e);
+            var n = Z(e);
             return !L(n) && M(t, n, r);
           }
 
@@ -286,7 +285,7 @@
 
           function A(t, e, r) {
             if (x(t, e, r)) return S(t, e, r);
-            var n = $(e);
+            var n = Z(e);
             return L(n) ? void 0 : A(t, n, r);
           }
 
@@ -301,14 +300,14 @@
 
           function I(t, e) {
             var r = R(t, e),
-                n = $(t);
+                n = Z(t);
             if (null === n) return r;
             var o = I(n, e);
             if (o.length <= 0) return r;
             if (r.length <= 0) return o;
 
-            for (var i = new p(), u = [], f = 0, a = r; f < a.length; f++) {
-              var c = a[f];
+            for (var i = new p(), u = [], a = 0, f = r; a < f.length; a++) {
+              var c = f[a];
               i.has(c) || (i.add(c), u.push(c));
             }
 
@@ -325,16 +324,16 @@
                 n = j(t, e, !1);
             if (z(n)) return r;
 
-            for (var o = J(n.keys()), i = 0;;) {
-              var u = X(o);
+            for (var o = H(n.keys()), i = 0;;) {
+              var u = Q(o);
               if (!u) return r.length = i, r;
-              var f = Q(u);
+              var a = J(u);
 
               try {
-                r[i] = f;
+                r[i] = a;
               } catch (t) {
                 try {
-                  Z(o);
+                  X(o);
                 } finally {
                   throw t;
                 }
@@ -399,7 +398,7 @@
             }
 
             var r = 3 === e ? "string" : 5 === e ? "number" : "default",
-                o = H(t, n);
+                o = G(t, n);
 
             if (void 0 !== o) {
               var i = o.call(t, r);
@@ -413,14 +412,14 @@
           function W(t, e) {
             if ("string" === e) {
               var r = t.toString;
-              if (q(r)) if (!C(o = r.call(t))) return o;
-              if (q(n = t.valueOf)) if (!C(o = n.call(t))) return o;
+              if ($(r)) if (!C(o = r.call(t))) return o;
+              if ($(n = t.valueOf)) if (!C(o = n.call(t))) return o;
             } else {
               var n;
-              if (q(n = t.valueOf)) if (!C(o = n.call(t))) return o;
+              if ($(n = t.valueOf)) if (!C(o = n.call(t))) return o;
               var o,
                   i = t.toString;
-              if (q(i)) if (!C(o = i.call(t))) return o;
+              if ($(i)) if (!C(o = i.call(t))) return o;
             }
 
             throw new TypeError();
@@ -443,15 +442,15 @@
             return Array.isArray ? Array.isArray(t) : t instanceof Object ? t instanceof Array : "[object Array]" === Object.prototype.toString.call(t);
           }
 
+          function $(t) {
+            return "function" == typeof t;
+          }
+
           function q(t) {
             return "function" == typeof t;
           }
 
           function B(t) {
-            return "function" == typeof t;
-          }
-
-          function G(t) {
             switch (K(t)) {
               case 3:
               case 4:
@@ -462,38 +461,38 @@
             }
           }
 
-          function H(t, e) {
+          function G(t, e) {
             var r = t[e];
 
             if (null != r) {
-              if (!q(r)) throw new TypeError();
+              if (!$(r)) throw new TypeError();
               return r;
             }
           }
 
-          function J(t) {
-            var e = H(t, o);
-            if (!q(e)) throw new TypeError();
+          function H(t) {
+            var e = G(t, o);
+            if (!$(e)) throw new TypeError();
             var r = e.call(t);
             if (!C(r)) throw new TypeError();
             return r;
           }
 
-          function Q(t) {
+          function J(t) {
             return t.value;
           }
 
-          function X(t) {
+          function Q(t) {
             var e = t.next();
             return !e.done && e;
           }
 
-          function Z(t) {
+          function X(t) {
             var e = t["return"];
             e && e.call(t);
           }
 
-          function $(t) {
+          function Z(t) {
             var e = Object.getPrototypeOf(t);
             if ("function" != typeof t || t === c) return e;
             if (e !== c) return e;
@@ -641,7 +640,7 @@
 
           function rt() {
             var t = 16,
-                r = a.create(),
+                r = f.create(),
                 n = o();
             return function () {
               function t() {
@@ -650,10 +649,10 @@
 
               return t.prototype.has = function (t) {
                 var e = i(t, !1);
-                return void 0 !== e && a.has(e, this._key);
+                return void 0 !== e && f.has(e, this._key);
               }, t.prototype.get = function (t) {
                 var e = i(t, !1);
-                return void 0 !== e ? a.get(e, this._key) : void 0;
+                return void 0 !== e ? f.get(e, this._key) : void 0;
               }, t.prototype.set = function (t, e) {
                 return i(t, !0)[this._key] = e, this;
               }, t.prototype["delete"] = function (t) {
@@ -669,7 +668,7 @@
 
               do {
                 t = "@@WeakMap@@" + c();
-              } while (a.has(r, t));
+              } while (f.has(r, t));
 
               return r[t] = !0, t;
             }
@@ -678,7 +677,7 @@
               if (!e.call(t, n)) {
                 if (!r) return;
                 Object.defineProperty(t, n, {
-                  value: a.create()
+                  value: f.create()
                 });
               }
 
@@ -693,12 +692,12 @@
               return t;
             }
 
-            function f(t) {
+            function a(t) {
               return "function" == typeof Uint8Array ? "undefined" != typeof crypto ? crypto.getRandomValues(new Uint8Array(t)) : "undefined" != typeof msCrypto ? msCrypto.getRandomValues(new Uint8Array(t)) : u(new Uint8Array(t), t) : u(new Array(t), t);
             }
 
             function c() {
-              var e = f(t);
+              var e = a(t);
               e[6] = 79 & e[6] | 64, e[8] = 191 & e[8] | 128;
 
               for (var r = "", n = 0; n < t; ++n) {
@@ -714,50 +713,70 @@
             return t.__ = void 0, delete t.__, t;
           }
 
-          t("decorate", l), t("metadata", v), t("defineMetadata", d), t("hasMetadata", _), t("hasOwnMetadata", w), t("getMetadata", g), t("getOwnMetadata", b), t("getMetadataKeys", k), t("getOwnMetadataKeys", m), t("deleteMetadata", E);
+          t("decorate", l), t("metadata", v), t("defineMetadata", d), t("hasMetadata", _), t("hasOwnMetadata", w), t("getMetadata", g), t("getOwnMetadata", b), t("getMetadataKeys", m), t("getOwnMetadataKeys", k), t("deleteMetadata", E);
         }(n);
       }();
     }(t || (t = {}));
     var e = Symbol("parameterSchemaMetadataKey");
 
     function r(t) {
-      var e = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : !1;
-      return function (r) {
-        var o = r,
-            i = function i() {
-          for (var _len = arguments.length, i = new Array(_len), _key = 0; _key < _len; _key++) {
-            i[_key] = arguments[_key];
+      var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : !1;
+      var n = arguments.length > 2 ? arguments[2] : undefined;
+      return function (o) {
+        var i = o,
+            u = function u() {
+          for (var _len = arguments.length, u = new Array(_len), _key = 0; _key < _len; _key++) {
+            u[_key] = arguments[_key];
           }
 
-          e && n(r, i);
+          r && function (t, r, n) {
+            var o = Reflect.getOwnMetadata(e, t, "constructor");
 
-          var u = _construct(o, i),
-              _t$validate = t.validate(u),
+            if (o) {
+              var _e = Object.keys(o);
+
+              for (var _i = 0, _e2 = _e; _i < _e2.length; _i++) {
+                var _i2 = _e2[_i];
+
+                var _o$_i2$validate = o[_i2].validate(r[Number.parseInt(_i2)]),
+                    _e3 = _o$_i2$validate.error;
+
+                if (_e3 instanceof Error) throw n && n(_e3, t), _e3;
+              }
+            }
+          }(o, u, n);
+
+          var a = _construct(i, u),
+              _t$validate = t.validate(a),
               f = _t$validate.error;
 
-          if (f instanceof Error) throw f;
-          return u;
+          if (f instanceof Error) throw n && n.apply(this, [f, o]), f;
+          return a;
         };
 
-        return i.prototype = o.prototype, i;
+        return u.prototype = i.prototype, u;
       };
     }
 
-    function n(t, r) {
-      var n = Reflect.getOwnMetadata(e, t, "constructor");
+    function n(t) {
+      return function (e, r) {
+        var n = e[r],
+            o = String(r);
+        Object.defineProperty(e, r, {
+          get: function get() {
+            return n;
+          },
+          set: function set(e) {
+            var _t$validate2 = t.validate(e),
+                r = _t$validate2.error;
 
-      if (n) {
-        var _t = Object.keys(n);
-
-        for (var _i = 0, _t2 = _t; _i < _t2.length; _i++) {
-          var _e = _t2[_i];
-
-          var _n$_e$validate = n[_e].validate(r[Number.parseInt(_e)]),
-              _t3 = _n$_e$validate.error;
-
-          if (_t3 instanceof Error) throw _t3;
-        }
-      }
+            if (r instanceof Error) throw r.message = r.message.replace('"value"', "\"".concat(o, "\"")), r;
+            n = e;
+          },
+          enumerable: !0,
+          configurable: !0
+        });
+      };
     }
 
     function o(t) {
@@ -780,13 +799,13 @@
           if (i) {
             var _r = Object.keys(i);
 
-            for (var _i2 = 0, _r2 = _r; _i2 < _r2.length; _i2++) {
-              var _o = _r2[_i2];
+            for (var _i3 = 0, _r2 = _r; _i3 < _r2.length; _i3++) {
+              var _o = _r2[_i3];
 
               var _i$_o$validate = i[_o].validate(e[Number.parseInt(_o)]),
                   _r3 = _i$_o$validate.error;
 
-              if (_r3 instanceof Error) return void t.apply(this, [_r3, n]);
+              if (_r3 instanceof Error) return void (t && t.apply(this, [_r3, n]));
             }
           }
 
@@ -796,87 +815,35 @@
     }
 
     const Joi = require('joi');
-    const fn = Joi.function();
-    const str = Joi.string().allow('');
-    const num = Joi.number();
-    const bool = Joi.boolean();
-    const obj = Joi.object();
-    const showLayers = Joi.object({
-        privateIds: Joi.array().items(Joi.number())
-    }).unknown();
-    const setTollgate = Joi.array().items(Joi.object({
-        channelId: Joi.string().required(),
-        position: Joi.object({
-            x: Joi.number().required(),
-            y: Joi.number().required()
-        }).unknown(),
-        title: Joi.string().required()
-    }).unknown());
-    const openScreenTrack = Joi.object({
-        mode: Joi.number().allow('TRACKCOLOR.SINGLE', 'TRACKCOLOR.MULTIPLE').only().required()
-    });
-    const getPresetImage = Joi.object({
-        id: Joi.number().required()
-    }).unknown();
-    const ptzSet = Joi.object({
-        lon: Joi.number().required(),
-        lat: Joi.number().required(),
-        alt: Joi.number().required()
-    }).unknown();
-    const ptzControlEnum = Joi.string().allow(...Object.entries({ PTZCONTROL: 'PTZCONTROL' }).map(v => v[1])).only();
-    const ptzCtrlParam = Joi.object({
-        deviceId: Joi.string().required(),
-        action: ptzControlEnum.required(),
-        Type: Joi.number(),
-        Pan: Joi.number(),
-        Tilt: Joi.number(),
-        Zoom: Joi.number(),
-    }).unknown();
-    const ptzControl = Joi.alternatives().try(ptzCtrlParam, ptzControlEnum);
-    const ptzSetStatic = getPresetImage;
-    const ptzBox = Joi.object({
-        mode: Joi.string().allow('PTZCONTROL.ZOOMOUT', 'PTZCONTROL.ZOOMIN').only().required(),
-        midPointX: Joi.number().required(),
-        midPointY: Joi.number().required(),
-        lengthX: Joi.number().required(),
-        lengthY: Joi.number().required(),
-    }).unknown().required();
-    const ptzSpeed = Joi.number().min(1).max(100);
-    const changeSceneMode = Joi.number().allow(...Object.entries('SCENEMODE').map(v => v[1])).only().required();
-    const threedMode = Joi.object({
-        alpha: Joi.number()
-    });
-    const changeChannel = Joi.string().required();
-    const setMarkWarn = Joi.object({
-        id: Joi.number(),
-        ids: Joi.array().items(Joi.number())
-    }).required();
-    const removeMarkWarn = Joi.object({
-        ids: Joi.array().items(Joi.number()).required()
-    }).required();
-    const addPreset = Joi.object({
-        name: Joi.string().required()
-    }).unknown();
     const personNameSchema = Joi.string().min(3);
     const personAgeSchema = Joi.number().min(1);
+    const propertyAgeSchema = Joi.number().min(10);
     const personSchema = Joi.object({
         name: personNameSchema,
         age: personAgeSchema
     });
     function error(err, key) {
         console.error('err is', err);
-        console.log(this.age);
         console.log(key);
     }
     let Person = class Person {
         constructor(name, age) {
-            (this.age = age), (this.name = name);
+            this.age = age;
+            this.name = name;
         }
         test2(name, age) {
             this.age = age;
             this.name = name;
         }
     };
+    __decorate([
+        n(propertyAgeSchema),
+        __metadata("design:type", Number)
+    ], Person.prototype, "age", void 0);
+    __decorate([
+        n(personNameSchema),
+        __metadata("design:type", String)
+    ], Person.prototype, "name", void 0);
     __decorate([
         i(error),
         __param(0, o(personNameSchema)),
@@ -886,35 +853,11 @@
         __metadata("design:returntype", void 0)
     ], Person.prototype, "test2", null);
     Person = __decorate([
-        r(personSchema, true),
+        r(personSchema, true, error),
+        __param(0, o(personNameSchema)), __param(1, o(personAgeSchema)),
         __metadata("design:paramtypes", [String, Number])
     ], Person);
-    let a = new Person('Jake', 9);
+    let a = new Person('Jake', 10);
     a.test2('3', 1);
-
-    exports.addPreset = addPreset;
-    exports.bool = bool;
-    exports.changeChannel = changeChannel;
-    exports.changeSceneMode = changeSceneMode;
-    exports.fn = fn;
-    exports.getPresetImage = getPresetImage;
-    exports.num = num;
-    exports.obj = obj;
-    exports.openScreenTrack = openScreenTrack;
-    exports.ptzBox = ptzBox;
-    exports.ptzControl = ptzControl;
-    exports.ptzControlEnum = ptzControlEnum;
-    exports.ptzCtrlParam = ptzCtrlParam;
-    exports.ptzSet = ptzSet;
-    exports.ptzSetStatic = ptzSetStatic;
-    exports.ptzSpeed = ptzSpeed;
-    exports.removeMarkWarn = removeMarkWarn;
-    exports.setMarkWarn = setMarkWarn;
-    exports.setTollgate = setTollgate;
-    exports.showLayers = showLayers;
-    exports.str = str;
-    exports.threedMode = threedMode;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
