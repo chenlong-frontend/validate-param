@@ -62,7 +62,7 @@ a.test2('3', 1)
 
 validate `class`
 
-|  param |  type | introduce |
+|  param |  type | Description |
 | ------------ | ------------ | -------|
 | schema | Schema | validation rules |
 | isValidateConstructor | Boolen | 'true' validate constructor param, 'false' not | 
@@ -72,7 +72,7 @@ validate `class`
 
 validate `property`
 
-|  param |  type | introduce |
+|  param |  type | Description |
 | ------------ | ------------ | -------|
 | schema | Schema | validation rules |
 
@@ -80,7 +80,7 @@ validate `property`
 
 validate `function`
 
-|  param |  type | introduce |
+|  param |  type | Description |
 | ------------ | ------------ | -------|
 | errorHandle | Function | error handle |
 
@@ -88,6 +88,6 @@ validate `function`
 
 define param validation rules
 
-|  param |  type | introduce |
+|  param |  type | Description |
 | ------------ | ------------ | -------|
 | schema | Schema | validation rules |
