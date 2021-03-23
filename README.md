@@ -1,6 +1,6 @@
-## parameter decorators
+<h1 align="center">parameter decorators</h1>
 
-based on [ts-decorator-validation](https://github.com/kanian/ts-decorator-validation)。
+This package based on [ts-decorator-validation](https://github.com/kanian/ts-decorator-validation)。
 
 ## install 
 
